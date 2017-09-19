@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { withRouter } from 'react-router';
 import { comparisonsFetchData } from '../../actions/comparisons';
+import { getLastRouteLink } from '../../actions/routerLocations';
 import CompareList from '../../Components/CompareList/CompareList';
-import { COMPARE_LIST } from '../../Constants/PropTypes';
+import GoBackToLink from '../../Components/GoBackToLink/GoBackToLink';
+import { COMPARE_LIST, ROUTER_LOCATIONS } from '../../Constants/PropTypes';
 import { PUBLIC_ROOT } from '../../login/DefaultRoutes';
 
 class Results extends Component {
@@ -29,10 +31,15 @@ class Results extends Component {
   }
 
   render() {
-    const { comparisons, hasErrored, isLoading } = this.props;
+    const { comparisons, hasErrored, isLoading, routerLocations } = this.props;
     return (
       <div className="usa-grid-full">
-        <CompareList compare={comparisons} hasErrored={hasErrored} isLoading={isLoading} />
+        <GoBackToLink goBackLink={getLastRouteLink(routerLocations)} />
+        <CompareList
+          compare={comparisons}
+          hasErrored={hasErrored}
+          isLoading={isLoading}
+        />
       </div>
     );
   }
@@ -50,12 +57,14 @@ Results.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   comparisons: COMPARE_LIST,
   isAuthorized: PropTypes.func.isRequired,
+  routerLocations: ROUTER_LOCATIONS,
 };
 
 Results.defaultProps = {
   comparisons: [],
   hasErrored: false,
   isLoading: true,
+  routerLocations: [],
 };
 
 Results.contextTypes = {
